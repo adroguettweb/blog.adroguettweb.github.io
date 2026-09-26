@@ -1,0 +1,311 @@
+/* =========================================================
+   blog.adroguett — sistema visual
+   ---------------------------------------------------------
+   El contenido se escribe en Markdown. Este archivo define
+   la identidad visual de todo el blog.
+   ========================================================= */
+
+:root {
+  --color-bg: #f8f9fb;
+  --color-surface: #ffffff;
+  --color-surface-soft: #f1f4f8;
+  --color-text: #101828;
+  --color-text-secondary: #667085;
+  --color-text-muted: #98a2b3;
+  --color-accent: #2563eb;
+  --color-accent-dark: #1d4ed8;
+  --color-accent-soft: #eff6ff;
+  --color-border: #e4e7ec;
+  --color-code-bg: #0d1117;
+  --color-code-text: #e6edf3;
+
+  --font-sans: "Sora", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --page-width: 72rem;
+  --content-width: 46rem;
+  --radius: 12px;
+  --radius-small: 7px;
+  --shadow-soft: 0 10px 35px rgba(16, 24, 40, 0.06);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background:
+    radial-gradient(circle at 85% 0%, rgba(37, 99, 235, 0.055), transparent 28rem),
+    var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+h1, h2, h3, h4 {
+  margin-top: 0;
+  color: var(--color-text);
+  font-weight: 650;
+  line-height: 1.18;
+  letter-spacing: -0.025em;
+}
+
+p { margin-top: 0; }
+
+.page {
+  width: min(100% - 3rem, var(--page-width));
+  margin-inline: auto;
+}
+
+.prose-width {
+  width: min(100% - 3rem, var(--content-width));
+  margin-inline: auto;
+}
+
+/* ---------- etiquetas de interfaz ---------- */
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.eyebrow::before {
+  content: "";
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+
+.meta {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.015em;
+}
+
+.text-link {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-decoration-color: rgba(37, 99, 235, 0.3);
+  text-underline-offset: 3px;
+}
+
+.text-link:hover {
+  color: var(--color-accent-dark);
+  text-decoration-color: currentColor;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tag {
+  display: inline-flex;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  line-height: 1;
+  padding: 0.42rem 0.65rem;
+}
+
+.tag:hover {
+  color: var(--color-accent);
+  border-color: rgba(37, 99, 235, 0.35);
+  background: var(--color-accent-soft);
+}
+
+/* ---------- contenido Markdown ---------- */
+
+.article-body {
+  font-size: 1.055rem;
+  line-height: 1.82;
+}
+
+.article-body > * + * {
+  margin-top: 1.4em;
+}
+
+.article-body h2 {
+  margin-top: 2.7em;
+  margin-bottom: 0.65em;
+  font-size: 1.55rem;
+}
+
+.article-body h3 {
+  margin-top: 2em;
+  margin-bottom: 0.55em;
+  font-size: 1.2rem;
+}
+
+.article-body p,
+.article-body li {
+  color: #243044;
+}
+
+.article-body strong {
+  color: var(--color-text);
+  font-weight: 650;
+}
+
+.article-body a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-decoration-color: rgba(37, 99, 235, 0.3);
+  text-underline-offset: 3px;
+}
+
+.article-body a:hover {
+  text-decoration-color: currentColor;
+}
+
+.article-body ul,
+.article-body ol {
+  padding-left: 1.4em;
+}
+
+.article-body blockquote {
+  margin: 1.8em 0;
+  padding: 0.85rem 1.2rem;
+  border: 1px solid #dbe7fb;
+  border-left: 3px solid var(--color-accent);
+  border-radius: 0 var(--radius-small) var(--radius-small) 0;
+  background: var(--color-accent-soft);
+  color: var(--color-text-secondary);
+}
+
+.article-body img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 2rem auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+
+.article-body figcaption {
+  margin-top: -1.2rem;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+}
+
+.article-body table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.article-body th,
+.article-body td {
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--color-border);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.article-body th {
+  background: var(--color-surface-soft);
+  font-weight: 600;
+}
+
+.article-body hr {
+  margin: 3rem 0;
+  border: 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.article-body :not(pre) > code {
+  padding: 0.18em 0.4em;
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  background: var(--color-surface-soft);
+  color: #344054;
+  font-family: var(--font-mono);
+  font-size: 0.84em;
+}
+
+.article-body pre {
+  margin: 1.8rem 0;
+  overflow-x: auto;
+  padding: 1.15rem 1.25rem;
+  border: 1px solid #202938;
+  border-radius: var(--radius);
+  background: var(--color-code-bg) !important;
+  color: var(--color-code-text);
+  font-size: 0.86rem;
+  line-height: 1.65;
+  box-shadow: 0 12px 30px rgba(13, 17, 23, 0.12);
+}
+
+.article-body pre code {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-family: var(--font-mono);
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 720px) {
+  .page,
+  .prose-width {
+    width: min(100% - 2rem, var(--page-width));
+  }
+
+  body {
+    font-size: 0.97rem;
+  }
+
+  .article-body {
+    font-size: 1rem;
+  }
+}

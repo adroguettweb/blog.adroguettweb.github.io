@@ -1,0 +1,82 @@
+---
+// BaseLayout.astro
+// Plantilla base que envuelve TODAS las páginas del sitio.
+// Se encarga de: el <head> (título, meta description, Open Graph, canonical),
+// cargar el CSS global, y mostrar el Header y Footer en cada página.
+
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  /** Si es un artículo, se usa "article" para Open Graph; si no, "website" */
+  ogType?: "website" | "article";
+}
+
+const {
+  title,
+  description,
+  image = "/images/og-default.png",
+  ogType = "website",
+} = Astro.props;
+
+const siteName = "adroguett.";
+const fullTitle = title === siteName ? title : `${title} · ${siteName}`;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageURL = new URL(image, Astro.site);
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="sitemap" href={`${import.meta.env.BASE_URL}sitemap-index.xml`} />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={siteName}
+      href={`${import.meta.env.BASE_URL}rss.xml`}
+    />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogImageURL} />
+
+    <!-- Twitter / X card (usa el mismo estándar Open Graph) -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
+    <!-- Tipografía: Sora para UI/cuerpo, JetBrains Mono para código y elementos
+         técnicos (categorías, tags, fechas). Es la misma pareja tipográfica que
+         usa adroguett.com, para que ambos sitios se sientan de la misma familia.
+         Se cargan con "preconnect" para que no ralenticen la carga inicial. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;650&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

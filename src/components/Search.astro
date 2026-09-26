@@ -1,0 +1,154 @@
+---
+// Search.astro
+// Buscador simple del lado del cliente. No usa ningún servicio externo:
+// descarga /search-index.json (generado a partir de tus artículos) y filtra
+// por título, descripción, categoría y tags directamente en el navegador.
+---
+
+<div class="search">
+  <input
+    type="search"
+    id="search-input"
+    placeholder="Buscar artículos…"
+    aria-label="Buscar artículos"
+    autocomplete="off"
+  />
+  <ul id="search-results" class="search__results" hidden></ul>
+</div>
+
+<style>
+  .search {
+    position: relative;
+    max-width: 28rem;
+  }
+
+  #search-input {
+    width: 100%;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    padding: 0.58rem 0.8rem 0.58rem 2rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-surface);
+    color: var(--color-text);
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.03);
+  }
+
+  #search-input:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 1px;
+  }
+
+  .search__results {
+    position: absolute;
+    top: calc(100% + 0.4rem);
+    left: 0;
+    right: 0;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    box-shadow: var(--shadow-soft);
+    list-style: none;
+    margin: 0;
+    padding: 0.4rem;
+    max-height: 22rem;
+    overflow-y: auto;
+    z-index: 30;
+  }
+
+  .search__results li a {
+    display: block;
+    padding: 0.55rem 0.6rem;
+    border-radius: 6px;
+  }
+
+  .search__results li a:hover,
+  .search__results li a:focus-visible {
+    background: var(--color-bg-raised);
+  }
+
+  .search__result-title {
+    display: block;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .search__result-meta {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    margin-top: 0.1rem;
+  }
+
+  .search__empty {
+    padding: 0.6rem;
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+  }
+</style>
+
+<script>
+  // Búsqueda 100% en el navegador. Sin frameworks, sin dependencias externas.
+  let searchIndex = null;
+
+  const input = document.getElementById("search-input");
+  const resultsList = document.getElementById("search-results");
+
+  async function loadIndex() {
+    if (searchIndex) return searchIndex;
+    const res = await fetch(`${import.meta.env.BASE_URL}search-index.json`);
+    searchIndex = await res.json();
+    return searchIndex;
+  }
+
+  function renderResults(items) {
+    if (items.length === 0) {
+      resultsList.innerHTML = `<li class="search__empty">Sin resultados.</li>`;
+      resultsList.hidden = false;
+      return;
+    }
+
+    resultsList.innerHTML = items
+      .slice(0, 8)
+      .map(
+        (item) => `
+          <li>
+            <a href="${item.url}">
+              <span class="search__result-title">${item.title}</span>
+              <span class="search__result-meta">${item.category}</span>
+            </a>
+          </li>
+        `
+      )
+      .join("");
+    resultsList.hidden = false;
+  }
+
+  input?.addEventListener("input", async (event) => {
+    const query = event.target.value.trim().toLowerCase();
+
+    if (query.length < 2) {
+      resultsList.hidden = true;
+      return;
+    }
+
+    const index = await loadIndex();
+
+    const matches = index.filter((item) => {
+      const haystack = [item.title, item.description, item.category, ...item.tags]
+        .join(" ")
+        .toLowerCase();
+      return haystack.includes(query);
+    });
+
+    renderResults(matches);
+  });
+
+  // Cierra los resultados si se hace clic fuera del buscador
+  document.addEventListener("click", (event) => {
+    if (!(event.target instanceof Node)) return;
+    if (!input?.parentElement?.contains(event.target)) {
+      resultsList.hidden = true;
+    }
+  });
+</script>

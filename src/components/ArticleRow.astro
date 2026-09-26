@@ -1,0 +1,118 @@
+---
+import { formatDate, tagToSlug } from "../lib/utils";
+
+interface Props {
+  slug: string;
+  title: string;
+  description: string;
+  category: string;
+  date: Date;
+  tags: string[];
+}
+
+const { slug, title, description, category, date, tags } = Astro.props;
+const categorySlug = category.toLowerCase();
+---
+
+<article class="article-row">
+  <div class="article-row__top">
+    <a href={`${import.meta.env.BASE_URL}${categorySlug}/`} class="article-row__category">{category}</a>
+    <time class="meta" datetime={date.toISOString()}>{formatDate(date)}</time>
+  </div>
+
+  <h3 class="article-row__title">
+    <a href={`${import.meta.env.BASE_URL}articulo/${slug}/`}>{title}</a>
+  </h3>
+
+  <p class="article-row__description">{description}</p>
+
+  <div class="article-row__bottom">
+    {tags.length > 0 && (
+      <ul class="tag-list">
+        {tags.map((tag) => (
+          <li class="tag"><a href={`${import.meta.env.BASE_URL}tag/${tagToSlug(tag)}/`}>{tag}</a></li>
+        ))}
+      </ul>
+    )}
+    <a href={`${import.meta.env.BASE_URL}articulo/${slug}/`} class="article-row__read">Leer →</a>
+  </div>
+</article>
+
+<style>
+  .article-row {
+    padding: 1.55rem 1.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.02);
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .article-row + .article-row {
+    margin-top: 0.75rem;
+  }
+
+  .article-row:hover {
+    transform: translateY(-2px);
+    border-color: #cbd5e1;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .article-row__top {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 0.55rem;
+  }
+
+  .article-row__category {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .article-row__title {
+    margin: 0;
+    font-size: 1.22rem;
+  }
+
+  .article-row__title a:hover {
+    color: var(--color-accent-dark);
+  }
+
+  .article-row__description {
+    max-width: 66ch;
+    margin: 0.45rem 0 1rem;
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.65;
+  }
+
+  .article-row__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .article-row__read {
+    flex-shrink: 0;
+    color: var(--color-text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+  }
+
+  .article-row__read:hover {
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 560px) {
+    .article-row__bottom {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+</style>

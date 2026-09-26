@@ -1,0 +1,35 @@
+---
+// [tag].astro
+// Genera una página por cada tag usado en al menos un artículo: /tag/sql/, /tag/python/, etc.
+
+import { getCollection } from "astro:content";
+import CategoryLayout from "../../layouts/CategoryLayout.astro";
+import { tagToSlug } from "../../lib/utils";
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection("posts", ({ data }) => !data.draft);
+
+  // Mapa slug -> nombre original del tag (por si tiene tildes o espacios)
+  const tagMap = new Map<string, string>();
+  allPosts.forEach((post) =>
+    post.data.tags.forEach((tag) => tagMap.set(tagToSlug(tag), tag))
+  );
+
+  return Array.from(tagMap.entries()).map(([slug, originalTag]) => {
+    const posts = allPosts
+      .filter((post) => post.data.tags.includes(originalTag))
+      .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+      .map((p) => ({ slug: p.id, ...p.data }));
+
+    return { params: { tag: slug }, props: { tag: originalTag, posts } };
+  });
+}
+
+const { tag, posts } = Astro.props;
+---
+
+<CategoryLayout
+  category={`#${tag}`}
+  description={`Artículos etiquetados con "${tag}".`}
+  posts={posts}
+/>

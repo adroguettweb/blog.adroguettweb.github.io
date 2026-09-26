@@ -1,0 +1,54 @@
+---
+// [slug].astro
+// Genera una página por cada artículo, en la URL /articulo/nombre-del-archivo/
+// El "slug" viene del nombre del archivo .md dentro de src/content/posts/
+
+import { getCollection, render } from "astro:content";
+import ArticleLayout from "../../layouts/ArticleLayout.astro";
+import { estimateReadingTime } from "../../lib/utils";
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection("posts", ({ data }) => !data.draft);
+
+  // Ordenamos por fecha para poder calcular "artículo anterior / siguiente"
+  const sorted = [...allPosts].sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+  );
+
+  return sorted.map((post, index) => {
+    // El "siguiente" en la lista es más antiguo; el "anterior" es más reciente.
+    const newer = sorted[index - 1];
+    const older = sorted[index + 1];
+
+    return {
+      params: { slug: post.id },
+      props: {
+        post,
+        prevPost: newer ? { slug: newer.id, title: newer.data.title } : null,
+        nextPost: older ? { slug: older.id, title: older.data.title } : null,
+      },
+    };
+  });
+}
+
+const { post, prevPost, nextPost } = Astro.props;
+const { Content, remarkPluginFrontmatter } = await render(post);
+
+// Si el artículo no especifica readingTime manualmente, lo calculamos
+// contando las palabras del contenido renderizado.
+const readingTime =
+  post.data.readingTime ?? estimateReadingTime(post.body ?? "");
+---
+
+<ArticleLayout
+  title={post.data.title}
+  description={post.data.description}
+  category={post.data.category}
+  date={post.data.date}
+  tags={post.data.tags}
+  readingTime={readingTime}
+  prevPost={prevPost}
+  nextPost={nextPost}
+>
+  <Content />
+</ArticleLayout>

@@ -1,0 +1,14 @@
+---
+import { getCollection } from "astro:content";
+import CategoryLayout from "../../layouts/CategoryLayout.astro";
+
+const posts = (await getCollection("posts", ({ data }) => !data.draft && data.category === "Notas"))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .map((p) => ({ slug: p.id, ...p.data }));
+---
+
+<CategoryLayout
+  category="Notas"
+  description="Apuntes breves, aprendizajes sueltos e ideas en curso."
+  posts={posts}
+/>

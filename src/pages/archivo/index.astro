@@ -1,0 +1,132 @@
+---
+// archivo/index.astro
+// Lista TODOS los artículos, agrupados por año y mes, del más reciente al más antiguo.
+// La idea (ver el brief) es que con el tiempo se convierta en un archivo histórico real.
+
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { formatDate } from "../../lib/utils";
+
+const allPosts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const MESES = [
+  "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+  "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre",
+];
+
+// Agrupamos por "AÑO" -> "MES" -> lista de artículos
+type Grouped = Record<string, Record<string, typeof allPosts>>;
+
+const grouped: Grouped = {};
+for (const post of allPosts) {
+  const year = post.data.date.getUTCFullYear().toString();
+  const month = MESES[post.data.date.getUTCMonth()];
+  grouped[year] ??= {};
+  grouped[year][month] ??= [];
+  grouped[year][month].push(post);
+}
+
+const years = Object.keys(grouped).sort((a, b) => Number(b) - Number(a));
+---
+
+<BaseLayout
+  title="Archivo"
+  description="Todos los artículos del blog, ordenados cronológicamente."
+>
+  <section class="page archive-header">
+    <p class="eyebrow">Archivo</p>
+    <h1>Todo, en orden cronológico</h1>
+    <p class="meta">{allPosts.length} artículo{allPosts.length === 1 ? "" : "s"} publicado{allPosts.length === 1 ? "" : "s"}</p>
+  </section>
+
+  <section class="page archive">
+    {years.length === 0 && <p class="meta">Todavía no hay artículos publicados.</p>}
+
+    {years.map((year) => (
+      <div class="archive-year">
+        <h2>{year}</h2>
+        {Object.keys(grouped[year])
+          .sort((a, b) => MESES.indexOf(b) - MESES.indexOf(a))
+          .map((month) => (
+            <div class="archive-month">
+              <h3>{month}</h3>
+              <ul>
+                {grouped[year][month].map((post) => (
+                  <li>
+                    <a href={`/articulo/${post.id}/`}>{post.data.title}</a>
+                    <span class="meta">
+                      {post.data.category} · {formatDate(post.data.date)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+      </div>
+    ))}
+  </section>
+</BaseLayout>
+
+<style>
+  .archive-header {
+    padding: 3rem 1.5rem 1.5rem;
+  }
+
+  .archive-header h1 {
+    font-size: 1.9rem;
+    margin: 0.4rem 0 0.6rem;
+  }
+
+  .archive {
+    padding: 1rem 1.5rem 4rem;
+    max-width: 42rem;
+    margin: 0 auto;
+  }
+
+  .archive-year {
+    margin-bottom: 2rem;
+  }
+
+  .archive-year h2 {
+    font-size: 1.6rem;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .archive-month h3 {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    font-weight: 600;
+    margin: 1.2rem 0 0.6rem;
+  }
+
+  .archive-month ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .archive-month li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed var(--color-border);
+  }
+
+  .archive-month li a:hover {
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 640px) {
+    .archive-month li {
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+  }
+</style>
