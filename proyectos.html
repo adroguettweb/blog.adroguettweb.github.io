@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+  <title>Proyectos · Alfonso Droguett.</title>
+  <meta name="description" content="Proyectos reales documentados de principio a fin: qué se construyó, cómo y por qué.">
+  <link rel="canonical" href="https://blog.adroguettweb.github.io/proyectos.html">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Alfonso Droguett.">
+  <meta property="og:title" content="Proyectos">
+  <meta property="og:description" content="Proyectos reales documentados de principio a fin: qué se construyó, cómo y por qué.">
+  <meta property="og:url" content="https://blog.adroguettweb.github.io/proyectos.html">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;650&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+  <header class="site-header" id="site-header">
+    <div class="page site-header__inner">
+      <a href="index.html" class="logo">Alfonso Droguett<span class="logo-accent">.</span></a>
+
+      <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Abrir menú de navegación">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav id="site-nav" class="site-nav">
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="tutoriales.html">Tutoriales</a></li>
+          <li><a href="proyectos.html" aria-current="page">Proyectos</a></li>
+          <li><a href="investigaciones.html">Investigaciones</a></li>
+          <li><a href="notas.html">Notas</a></li>
+          <li><a href="archivo.html">Archivo</a></li>
+          <li class="site-nav__external">
+            <a href="https://adroguetth.github.io/" target="_blank" rel="noopener">
+              Servicios
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                <path d="M1.5 8.5L8.5 1.5M8.5 1.5H3M8.5 1.5V7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page category-header">
+      <p class="eyebrow">Categoría</p>
+      <h1>Proyectos</h1>
+      <p class="category-header__description">Proyectos reales documentados de principio a fin: qué se construyó, cómo y por qué.</p>
+    </section>
+
+    <section class="page category-list">
+      <div id="listado-categoria"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="page site-footer__inner">
+      <span class="site-footer__logo">Alfonso Droguett<span class="logo-accent">.</span></span>
+      <span class="site-footer__copy">Automatización · Datos · Chile</span>
+      <ul class="site-footer__links">
+        <li><a href="https://github.com/adroguett" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://linkedin.com/in/adroguett" target="_blank" rel="noopener">LinkedIn</a></li>
+      </ul>
+      <a href="https://adroguetth.github.io/" target="_blank" rel="noopener" class="site-footer__back">← adroguett.com</a>
+    </div>
+  </footer>
+
+  <script src="data/articulos.js"></script>
+  <script src="js/listados.js"></script>
+  <script>
+    const deEstaCategoria = ARTICULOS.filter(a => a.categoria === "Proyectos");
+    pintarListado(
+      "listado-categoria",
+      ordenarPorFechaDesc(deEstaCategoria),
+      "Todavía no hay artículos en esta categoría."
+    );
+  </script>
+  <script src="js/header.js"></script>
+</body>
+</html>

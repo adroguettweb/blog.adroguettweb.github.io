@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  sitemap.xml
+  -----------
+  A diferencia del resto del sitio, este archivo SÍ hay que actualizarlo
+  a mano cuando agregues un artículo nuevo: copia el bloque <url> de abajo
+  y cambia el <loc> y <lastmod>. No es obligatorio para que el sitio
+  funcione, pero ayuda a que Google indexe tus artículos más rápido.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://blog.adroguettweb.github.io/</loc>
+  </url>
+  <url>
+    <loc>https://blog.adroguettweb.github.io/tutoriales.html</loc>
+  </url>
+  <url>
+    <loc>https://blog.adroguettweb.github.io/proyectos.html</loc>
+  </url>
+  <url>
+    <loc>https://blog.adroguettweb.github.io/investigaciones.html</loc>
+  </url>
+  <url>
+    <loc>https://blog.adroguettweb.github.io/notas.html</loc>
+  </url>
+  <url>
+    <loc>https://blog.adroguettweb.github.io/archivo.html</loc>
+  </url>
+
+  <!-- Copia este bloque por cada artículo nuevo que publiques:
+  <url>
+    <loc>https://blog.adroguettweb.github.io/articulos/NOMBRE-DEL-ARCHIVO.html</loc>
+    <lastmod>AAAA-MM-DD</lastmod>
+  </url>
+  -->
+</urlset>

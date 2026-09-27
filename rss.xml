@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  rss.xml
+  -------
+  Igual que sitemap.xml: sin build automático, este archivo se actualiza
+  a mano. Copia el bloque <item> de abajo por cada artículo nuevo y
+  pégalo arriba de los demás (los más recientes van primero).
+-->
+<rss version="2.0">
+  <channel>
+    <title>Alfonso Droguett.</title>
+    <link>https://blog.adroguettweb.github.io/</link>
+    <description>Un archivo personal sobre datos, programación, automatización y tecnología.</description>
+    <language>es-cl</language>
+
+    <!-- Copia este bloque por cada artículo nuevo, con sus datos:
+    <item>
+      <title>Título del artículo</title>
+      <link>https://blog.adroguettweb.github.io/articulos/NOMBRE-DEL-ARCHIVO.html</link>
+      <description>Descripción breve del artículo.</description>
+      <pubDate>Sat, 26 Sep 2026 00:00:00 GMT</pubDate>
+    </item>
+    -->
+
+  </channel>
+</rss>
